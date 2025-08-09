@@ -22,7 +22,7 @@ class Character(Base):
 class Message(Base):
     __tablename__ = "messages"
     id = Column(Integer, primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"))
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
     character_id = Column(Integer, ForeignKey("characters.id"))
     role = Column(String)      # "user" | "assistant"
     content = Column(Text)
