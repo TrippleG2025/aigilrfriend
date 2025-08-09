@@ -9,15 +9,13 @@ def _hash_pw(pw: str) -> str:
 def run_seeds():
     db = SessionLocal()
 
-    # Test user
-    if not db.query(User).filter_by(email="test@example.com").first():
-        db.add(User(email="test@example.com"),)
-        db.commit()
-        u = db.query(User).filter_by(email="test@example.com").first()
-        u.password_hash = _hash_pw("test123")
-        db.commit()
+    # Default-User sicher anlegen
+    u = db.query(User).filter_by(email="test@example.com").first()
+    if not u:
+        u = User(email="test@example.com", password_hash=_hash_pw("test123"), plan="free")
+        db.add(u)
 
-    # Characters from /characters folder
+    # Characters aus /characters
     chars_dir = Path(__file__).resolve().parents[2] / "characters"
     for key in ["emma", "lara"]:
         p = chars_dir / f"{key}.yaml"
@@ -27,3 +25,4 @@ def run_seeds():
 
     db.commit()
     db.close()
+
