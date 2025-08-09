@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.pyc
+backend/*.sqlite3
+backend/.codex.sqlite3
+dev.sqlite3
+
+# Node
+frontend/node_modules/
+frontend/dist/
+frontend/package-lock.json
+
+# Misc
+artifacts/
+.DS_Store

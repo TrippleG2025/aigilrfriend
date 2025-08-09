@@ -11,10 +11,7 @@ def run_seeds():
 
     # Test user
     if not db.query(User).filter_by(email="test@example.com").first():
-        db.add(User(email="test@example.com"),)
-        db.commit()
-        u = db.query(User).filter_by(email="test@example.com").first()
-        u.password_hash = _hash_pw("test123")
+        db.add(User(email="test@example.com", password_hash=_hash_pw("test123")))
         db.commit()
 
     # Characters from /characters folder
