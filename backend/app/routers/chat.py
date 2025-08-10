@@ -34,3 +34,4 @@ def send(body: ChatIn):
     db.commit()
 
     return {"reply": reply}
+
