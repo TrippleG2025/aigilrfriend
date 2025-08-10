@@ -1,0 +1,19 @@
+# Node
+frontend/node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Python
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+backend/.pytest_cache/
+
+# DB/Artefakte
+*.sqlite3
+artifacts/
+
+# OS
+.DS_Store
