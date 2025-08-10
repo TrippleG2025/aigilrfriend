@@ -1,5 +1,10 @@
 import pathlib, sys
 import pytest
+# conftest.py – ganz oben hinzufügen:
+import os, pathlib
+# sicherstellen, dass Tests die gleiche DB benutzen wie das Setup-Skript
+default_db = pathlib.Path(__file__).resolve().parents[2] / "backend" / ".codex.sqlite3"
+os.environ.setdefault("DATABASE_URL", f"sqlite:///{default_db}")
 
 # Projektwurzel in sys.path
 root = pathlib.Path(__file__).resolve().parents[1]
