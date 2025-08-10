@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>aigilrfriend – Debug Chat</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <style>
+    body { font-family: system-ui, sans-serif; max-width: 680px; margin: 24px auto; padding: 0 16px; }
+    .row { display: flex; gap: 8px; margin: 12px 0; }
+    input, button, textarea { padding: 8px; font-size: 16px; }
+    textarea { width: 100%; height: 120px; }
+    .log { white-space: pre-wrap; background: #f6f7f9; border: 1px solid #e1e4e8; padding: 12px; border-radius: 8px; }
+    .ok { color: #0a7; } .err { color: #c00; }
+    label { font-size: 12px; color: #666; display:block; }
+  </style>
+</head>
+<body>
+  <h1>Debug Chat (direct → /chat/send)</h1>
+  <div class="row">
+    <div style="flex:1">
+      <label>API Base</label>
+      <input id="api" value="http://localhost:8000" />
+    </div>
+    <div style="width:160px">
+      <label>Character Key</label>
+      <input id="ckey" value="emma" />
+    </div>
+  </div>
+  <div>
+    <label>Message</label>
+    <textarea id="msg">Hi</textarea>
+  </div>
+  <div class="row">
+    <button id="send">Send</button>
+    <span id="status"></span>
+  </div>
+  <div class="log" id="out">Output…</div>
+  <script>
+    const qs = s => document.querySelector(s);
+    async function send() {
+      const base = qs('#api').value.replace(/\/+$/, '');
+      const url = base + '/chat/send';
+      const body = { character_key: qs('#ckey').value.trim(), text: qs('#msg').value };
+      const out = qs('#out'); const status = qs('#status');
+      status.textContent = '…sending'; status.className = '';
+      try {
+        const res = await fetch(url, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(body) });
+        const txt = await res.text();
+        out.textContent = `HTTP ${res.status}\n` + txt;
+        status.textContent = res.ok ? 'OK' : 'Error';
+        status.className = res.ok ? 'ok' : 'err';
+      } catch (e) { out.textContent = String(e); status.textContent = 'Error'; status.className = 'err'; }
+    }
+    qs('#send').addEventListener('click', send);
+  </script>
+</body>
+</html>

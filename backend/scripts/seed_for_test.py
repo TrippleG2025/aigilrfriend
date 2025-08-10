@@ -1,30 +1,28 @@
-# scripts/seed_for_tests.py
-from app.db import SessionLocal, engine
-from app.models import Base, Character
+# backend/scripts/seed_for_test.py
+import sys
+import pathlib
 
-# Tabellen sicherstellen (idempotent)
-try:
-    Base.metadata.create_all(bind=engine)
-except Exception:
-    pass
+# Projektpfad sicherstellen
+root = pathlib.Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(root))
 
-db = SessionLocal()
-try:
-    char = db.query(Character).first()
-    if not char:
-        db.add(Character(
+from app.db import SessionLocal
+from app.models import Character
+
+def main():
+    db = SessionLocal()
+    if db.query(Character).count() == 0:
+        char = Character(
             key="emma",
             name="Emma",
             style="friendly",
-            prompt_template="You are Emma."
-        ))
+            prompt_template="You are Emma, a warm and supportive virtual girlfriend."
+        )
+        db.add(char)
         db.commit()
-        print("Seeded: Character 'emma'")
+        print("✅ Seeded: Character 'emma'")
     else:
-        if not getattr(char, "key", None):
-            char.key = "emma"
-            db.add(char)
-            db.commit()
-        print("Seed present:", getattr(char, "key", None))
-finally:
-    db.close()
+        print("ℹ️ Characters already seeded")
+
+if __name__ == "__main__":
+    main()
